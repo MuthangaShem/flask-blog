@@ -27,3 +27,9 @@ def posts(page):
 @login_manager.user_loader
 def load_user(user):
     return Admin.query.get(user)
+
+@app.before_request
+def before_request():
+    g.user = current_user
+    g.search_form = SearchForm()
+
