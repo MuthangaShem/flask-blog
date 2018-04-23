@@ -23,3 +23,7 @@ def posts(page):
         abort(404)
     pagination = Pagination(page, PER_PAGE, count)
     return render_template('posts.html', pagination=pagination, posts=posts)
+
+@login_manager.user_loader
+def load_user(user):
+    return Admin.query.get(user)
