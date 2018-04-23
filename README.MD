@@ -1,6 +1,8 @@
 # PERSONAL BLOG
-A Blog that one can add post, add a tag and post it.
-One can view the posts, add a comment and delete a comment
+    A Blog that one can add post, add a tag and post it.
+    One can view the posts, add a comment and delete a comment.
+    One can also search through the posts via tags or keywords
+
 ## Installation
     Virtual environment
     Flask
