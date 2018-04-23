@@ -110,3 +110,17 @@ def delete_post(id):
     db.session.commit()
     return render_template('index.html')
 
+@app.route('/addtag', methods=['GET', 'POST'])
+@login_required
+def addtag():
+    form = TagForm()
+    if request.method == "POST":
+        if form.validate() == False:
+            return render_template('addtag.html', form=form)
+        else:
+            tag = Tag(form.tag.data)
+            db.session.add(tag)
+            db.session.commit()
+            flash('Tag created successfully')
+            return render_template('tags.html', tags=Tag.query.all())
+    return render_template("addtag.html", form=form)
