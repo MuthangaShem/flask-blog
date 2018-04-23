@@ -21,3 +21,14 @@ class LoginForm(Form):
 
         self.admin = admin
         return True
+
+class PostForm(Form):
+    title = TextField("Title", [validators.Required("Please enter the title")])
+    text = TextAreaField("Text", [validators.Required("Please provide the content for the title")])
+    tag = SelectMultipleField("Tag")
+    submit = SubmitField("Create Post")
+
+    def __init__(self, *args, **kwargs):
+        kwargs['csrf_enabled'] = False
+        Form.__init__(self, *args, **kwargs)
+
