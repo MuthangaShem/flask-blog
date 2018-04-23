@@ -32,3 +32,10 @@ class PostForm(Form):
         kwargs['csrf_enabled'] = False
         Form.__init__(self, *args, **kwargs)
 
+class TagForm(Form):
+    tag = TextField('Tag Name', [validators.Required('Enter tag name')])
+    submit = SubmitField("Create Tag")
+
+    def __init__(self, *args, **kwargs):
+        kwargs['csrf_enabled'] = False
+        Form.__init__(self, *args, **kwargs)
