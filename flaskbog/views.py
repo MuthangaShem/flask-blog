@@ -102,6 +102,7 @@ def edit_post(id):
         form.tag.choices = [(str(tag.id), str(tag.tag)) for tag in Tag.query.all()]
         return render_template('editpost.html', post_id=post.id, form=form)
 
+
 @app.route('/deletepost/<int:id>')
 @login_required
 def delete_post(id):
@@ -109,6 +110,7 @@ def delete_post(id):
     db.session.delete(post)
     db.session.commit()
     return render_template('index.html')
+
 
 @app.route('/addtag', methods=['GET', 'POST'])
 @login_required
@@ -125,6 +127,7 @@ def addtag():
             return render_template('tags.html', tags=Tag.query.all())
     return render_template("addtag.html", form=form)
 
+
 @app.route('/tags', methods=['GET', 'POST'])
 def tags():
     tags = Tag.query.all()
@@ -132,6 +135,7 @@ def tags():
         flash("No tag created yet")
         return render_template('addtag.html')
     return render_template('tags.html', tags=tags)
+
 
 @app.route('/tags/<int:id>', methods=['GET', 'POST'])
 @login_required
@@ -158,3 +162,15 @@ def delete_tag(id):
     db.session.delete(tag)
     db.session.commit()
     return render_template('tags.html', tags=Tag.query.all())
+
+
+@app.route('/search', methods=['POST'])
+@login_required
+def search():
+    if request.method == 'POST':
+        if g.search_form.validate() == False:
+            return render_template('index.html', form=g.search_form)
+        else:
+            results = Post.query.whoosh_search(g.search_form.search.data, MAX_SEARCH_RESULTS).all()
+            return render_template('search.html', query=g.search_form.search.data, results=results)
+    return render_template('index.html', form=form)
