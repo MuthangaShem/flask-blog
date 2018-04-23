@@ -133,3 +133,28 @@ def tags():
         return render_template('addtag.html')
     return render_template('tags.html', tags=tags)
 
+@app.route('/tags/<int:id>', methods=['GET', 'POST'])
+@login_required
+def edit_tag(id):
+    if request.method == 'POST':
+        form = TagForm()
+        if form.validate() == True:
+            tag = Tag.query.filter_by(id=id).first()
+            tag.tag = form.tag.data
+            db.session.merge(tag)
+            db.session.commit()
+            flash('Tag updated successfully')
+            return render_template('tags.html', tags=Tag.query.all())
+    elif request.method == 'GET':
+        tag = Tag.query.get(id)
+        form = TagForm(id=tag.id, tag=tag.tag)
+        return render_template('edittag.html', tag_id=tag.id, form=form)
+
+
+@app.route('/delete_tag/<int:id>')
+@login_required
+def delete_tag(id):
+    tag = Tag.query.filter_by(id=id).first()
+    db.session.delete(tag)
+    db.session.commit()
+    return render_template('tags.html', tags=Tag.query.all())
