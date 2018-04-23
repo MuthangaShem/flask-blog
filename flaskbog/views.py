@@ -101,3 +101,12 @@ def edit_post(id):
         form = PostForm(id=post.id, title=post.title, text=post.text)
         form.tag.choices = [(str(tag.id), str(tag.tag)) for tag in Tag.query.all()]
         return render_template('editpost.html', post_id=post.id, form=form)
+
+@app.route('/deletepost/<int:id>')
+@login_required
+def delete_post(id):
+    post = Post.query.filter_by(id=id).first()
+    db.session.delete(post)
+    db.session.commit()
+    return render_template('index.html')
+
