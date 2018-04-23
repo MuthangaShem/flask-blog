@@ -39,3 +39,6 @@ class TagForm(Form):
     def __init__(self, *args, **kwargs):
         kwargs['csrf_enabled'] = False
         Form.__init__(self, *args, **kwargs)
+
+class SearchForm(Form):
+    search = TextField('Search', [validators.Required('Enter the text to search')])
