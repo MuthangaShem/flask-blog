@@ -33,3 +33,12 @@ def before_request():
     g.user = current_user
     g.search_form = SearchForm()
 
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        login_user(form.admin)
+        flash("Logged in successfully.")
+        return redirect(request.args.get("next") or url_for("index"))
+    return render_template("login.html", form=form)
+
