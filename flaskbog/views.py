@@ -49,3 +49,25 @@ def logout():
     flash("Logout successfully")
     logout_user()
     return redirect(url_for("index"))
+
+@app.route('/post/<int:id>')
+def post(id):
+    post = Post.query.filter_by(id=id).first()
+    return render_template('post.html', post=post)
+
+@app.route('/addpost', methods=["GET", "POST"])
+@login_required
+def addpost():
+    form = PostForm(csrf_enabled=False)
+    form.tag.choices = [(str(tag.id), str(tag.tag)) for tag in Tag.query.all()]
+    if request.method == "POST":
+        if form.validate() == False:
+            return render_template('addpost.html', form=form)
+        else:
+            tags = [Tag.query.filter_by(id=tag_id).first() for tag_id in form.tag.data]
+            post = Post(form.title.data, form.text.data, tags)
+            db.session.add(post)
+        db.session.commit()
+        flash('Posted successfully')
+        return render_template('index.html')
+    return render_template("addpost.html", form=form)
