@@ -124,3 +124,12 @@ def addtag():
             flash('Tag created successfully')
             return render_template('tags.html', tags=Tag.query.all())
     return render_template("addtag.html", form=form)
+
+@app.route('/tags', methods=['GET', 'POST'])
+def tags():
+    tags = Tag.query.all()
+    if tags is None:
+        flash("No tag created yet")
+        return render_template('addtag.html')
+    return render_template('tags.html', tags=tags)
+
